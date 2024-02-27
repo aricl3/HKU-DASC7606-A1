@@ -75,7 +75,12 @@ def main(args=None):
             ###################################################################
             # TODO: Please fill the codes here to zero optimizer gradients
             ##################################################################
-            pass
+            
+            optimizer.zero_grad()
+            # Zeroing the optimizer gradients: Before you calculate the gradients 
+            # for a new iteration, you need to zero out the gradients from the previous 
+            # iteration. This is because by default, gradients are accumulated in PyTorch.
+            # pass
 
             ##################################################################
 
@@ -95,7 +100,11 @@ def main(args=None):
             ###################################################################
             # TODO: Please fill the codes here to complete the gradient backward
             ##################################################################
-            pass
+            loss.backward()
+            #Backpropagation: After calculating the loss, you need to call .backward() 
+            # on the loss tensor to perform backpropagation. This computes the gradient 
+            # of the loss with respect to all parameters in the model that have requires_grad=True.
+            # pass
 
             ##################################################################
 
@@ -104,7 +113,11 @@ def main(args=None):
             ###################################################################
             # TODO: Please fill the codes here to optimize parameters
             ##################################################################
-            pass
+            optimizer.step()
+            #Optimizing parameters: Finally, you need to step the optimizer to update 
+            # the model parameters based on the gradients computed during backpropagation.
+            
+            # pass
 
             ##################################################################
 

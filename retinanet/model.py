@@ -55,7 +55,7 @@ class ResNet(nn.Module):
         # TODO: Please substitute the "?" to declare Focal Loss
         ##################################################################
 
-        self.focalLoss = "?"
+        self.focalLoss =  losses.FocalLoss() 
 
         ##################################################################
 
@@ -69,9 +69,13 @@ class ResNet(nn.Module):
         # TODO: Please complete the downsample module
         # Hint: Use a "kernel_size=1"'s convolution layer to align the dimension
         #####################################################################
-        downsample = nn.Sequential()
+        downsample = None
         if stride != 1 or self.inplanes != planes * block.expansion:
-            pass
+            downsample = nn.Sequential(
+                nn.Conv2d(self.inplanes, planes * block.expansion,
+                          kernel_size=1, stride=stride, bias=False),
+                nn.BatchNorm2d(planes * block.expansion),
+            )
 
         ##################################################################
 

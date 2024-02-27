@@ -7,8 +7,19 @@ def calc_iou(a, b):
     # TODO: Please modify and fill the codes below to calculate the iou of the two boxes a and b
     ###################################################################
     
-    intersection = 0.0
-    ua = 1.0
+    # intersection = 0.0
+    # ua = 1.0
+    area = (b[:, 2] - b[:, 0]) * (b[:, 3] - b[:, 1])
+
+    iw = torch.min(torch.unsqueeze(a[:, 2], dim=1), b[:, 2]) - torch.max(torch.unsqueeze(a[:, 0], 1), b[:, 0])
+    ih = torch.min(torch.unsqueeze(a[:, 3], dim=1), b[:, 3]) - torch.max(torch.unsqueeze(a[:, 1], 1), b[:, 1])
+
+    iw = torch.clamp(iw, min=0)
+    ih = torch.clamp(ih, min=0)
+
+    ua = torch.unsqueeze((a[:, 2] - a[:, 0]) * (a[:, 3] - a[:, 1]), dim=1) + area - iw * ih
+
+    intersection = iw * ih
 
     ##################################################################
 
@@ -108,10 +119,14 @@ class FocalLoss(nn.Module):
             # TODO: Please substitute the "?" to calculate Focal Loss
             ##################################################################
             
-            focal_weight = "?"
 
-            bce = "?"
+            # Calculate the binary cross-entropy (BCE) loss
+            bce = -(targets * torch.log(classification) + (1.0 - targets) * torch.log(1.0 - classification))
 
+            # Calculate the focal weight for each example
+            focal_weight = alpha_factor * torch.pow(1.0 - classification, gamma)
+
+            # Calculate the Focal Loss
             cls_loss = focal_weight * bce
 
             ##################################################################
